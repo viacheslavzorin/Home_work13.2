@@ -36,12 +36,12 @@ class Channel:
     def channel_id(self):
         return self.__channel_id
 
-   # @channel_id.setter
-    #def channel_id(self, channel_id):
-        #if channel_id:
-            #print('UserWarning запрещено')
-        #else:
-            #self.__x = channel_id
+    # @channel_id.setter
+    # def channel_id(self, channel_id):
+    # if channel_id:
+    # print('UserWarning запрещено')
+    # else:
+    # self.__x = channel_id
 
     def get_service(self):
         return build('youtube', 'v3', developerKey=api_key)
