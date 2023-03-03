@@ -12,8 +12,8 @@ print(vdud.description)
 print(vdud.subscriberCount)
 print(vdud.videoCount)
 print(vdud.viewCount)
-vdud.channel_id= 'Новое название'
-#print(vdud.channel_id)
+vdud.channel_id = 'Новое название'
+print(vdud.channel_id)
 #print(Channel.get_service)
 print(vdud.get_service())
 vdud.to_json()
