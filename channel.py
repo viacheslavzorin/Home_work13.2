@@ -8,6 +8,7 @@ api_key: str = os.getenv('MY_API_KEY')
 # создать специальный объект для работы с API
 youtube = build('youtube', 'v3', developerKey=api_key)
 
+# UC1eFXmJNkjITxPFWTy6RsWg редакия
 
 # channel_id = 'aLdfZn13RXFrTrgUyaGb1A'    # Редакция
 
@@ -15,6 +16,7 @@ youtube = build('youtube', 'v3', developerKey=api_key)
 class Channel:
     def __init__(self, channel_id):
         self.__channel_id = channel_id
+
         self.id = self.channel_get()['items'][0]['id']
         self.url = self.channel_get()['items'][0]['snippet']['thumbnails']['default']['url']
         self.title = self.channel_get()['items'][0]['snippet']['title']
@@ -32,16 +34,20 @@ class Channel:
         channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         return channel
 
-    @property
-    def channel_id(self):
-        return self.__channel_id
+    #@property
+    #def channel_id(self):
 
-    # @channel_id.setter
-    # def channel_id(self, channel_id):
-    # if channel_id:
-    # print('UserWarning запрещено')
-    # else:
-    # self.__x = channel_id
+        #return self.__channel_id
+
+
+
+
+    #@channel_id.setter
+    #def channel_id(self, channel_id):
+         #if channel_id:
+              #print('UserWarning запрещено')
+         #else:
+              #self.__x = channel_id
 
     def get_service(self):
         return build('youtube', 'v3', developerKey=api_key)
@@ -58,3 +64,15 @@ class Channel:
         }
         with open("filename.json", "w", encoding="UTF-8") as file:
             json.dump(data, file, indent=2, ensure_ascii=False)
+
+    def __str__(self):
+        return f"Yotube-канал: {self.title}"
+
+    def __add__(self, other):
+        return self.subscriberCount + other.subscriberCount
+
+    def __lt__(self, other):
+        return self.subscriberCount > other.subscriberCount
+
+    #def __lt__(self, other):
+        #return self.subscriberCount < other.subscriberCount
