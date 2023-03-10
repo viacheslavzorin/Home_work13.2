@@ -1,5 +1,6 @@
-import json
+import json, isodate
 import os
+
 
 from googleapiclient.discovery import build
 
@@ -7,12 +8,8 @@ from googleapiclient.discovery import build
 api_key: str = os.getenv('MY_API_KEY')
 # создать специальный объект для работы с API
 youtube = build('youtube', 'v3', developerKey=api_key)
-
 # UC1eFXmJNkjITxPFWTy6RsWg редакия
-
 # channel_id = 'aLdfZn13RXFrTrgUyaGb1A'    # Редакция
-
-
 class Channel:
     def __init__(self, channel_id):
         self.__channel_id = channel_id
@@ -36,11 +33,7 @@ class Channel:
 
     #@property
     #def channel_id(self):
-
         #return self.__channel_id
-
-
-
 
     #@channel_id.setter
     #def channel_id(self, channel_id):
@@ -64,15 +57,39 @@ class Channel:
         }
         with open("filename.json", "w", encoding="UTF-8") as file:
             json.dump(data, file, indent=2, ensure_ascii=False)
-
     def __str__(self):
         return f"Yotube-канал: {self.title}"
-
     def __add__(self, other):
+        """сложение"""
         return self.subscriberCount + other.subscriberCount
-
     def __lt__(self, other):
+        """Сравнение"""
         return self.subscriberCount > other.subscriberCount
 
-    #def __lt__(self, other):
-        #return self.subscriberCount < other.subscriberCount
+class Video:
+    def __init__(self, video_id):
+        self.video_id = video_id
+        self.video_titl = self.video_get()['items'][0]['snippet']['title']
+        self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
+        self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+    def video_get(self):
+        video_response = youtube.videos().list(part='snippet,statistics',
+                                               id=self.video_id
+                                               ).execute()
+        return video_response
+    def __str__(self):
+        return f"{self.video_titl}"
+
+class PLVideo(Video):
+    def __init__(self,video_id, playlist_id):
+        super(). __init__(video_id)
+        self.playlist_id = playlist_id
+        self.playlist = youtube.playlists().list(id=playlist_id, part='snippet').execute()
+        self.playlist_name = self.playlist['items'][0]['snippet']['title']
+    def __str__(self):
+        return f"{self.video_titl} {self.playlist_name}"
+
+
+
+
+
