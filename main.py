@@ -1,4 +1,6 @@
-from channel import Channel, PLVideo, Video
+from channel import Channel, PLVideo, Video, PlayList
+
+
 
 # channel_id = 'UCMCgOm8GZkHp8zJ6l7_hIuA'
 # channel_id = 'UC1eFXmJNkjITxPFWTy6RsWg'
@@ -32,3 +34,18 @@ print(video2)
 # Пушкин: наше все? (Литература)
 # шаблон: 'название_видео (название_плейлиста)'
 # print(video2.video_get())
+s = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+print(s.playlist_name)
+print(s.playlist)
+d = PlayList('PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+print(d.playl)
+print(d.playl_name)
+
+pl = PlayList('PLguYHBi01DWr4bRWc4uaguASmo7lW4GCb')
+print(pl.playl_name)
+print(pl.playl_videos)
+print(pl.video_ids)
+duration = pl.total_duration
+print(duration)
+
+print(pl.best_video())
