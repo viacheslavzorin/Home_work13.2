@@ -88,6 +88,7 @@ class Video:
     def __str__(self):
         return f"{self.video_titl}"
 
+
 class PLVideo(Video):
     def __init__(self, video_id, playlist_id):
         super().__init__(video_id)
@@ -97,28 +98,31 @@ class PLVideo(Video):
 
     def __str__(self):
         return f"{self.video_titl} {self.playlist_name}"
+
+
 class PlayList:
     """Вывод статистики плайлиста"""
 
     def __init__(self, id_playl):
         self.id_playl = id_playl
         super().__init__()
-        self.playl = youtube.playlists().list(id = self.id_playl, part = 'snippet, contentDetails',
-                                                    maxResults=50).execute()
+        self.playl = youtube.playlists().list(id=self.id_playl, part='snippet, contentDetails',
+                                              maxResults=50).execute()
         self.url_playl = f"https://www.youtube.com/playlist?list={self.id_playl}"
         self.playl_name = self.playl['items'][0]['snippet']['title']
         self.playl_videos = youtube.playlistItems().list(playlistId=id_playl,
-                                                       part='contentDetails',
-                                                       maxResults=50,
-                                                       ).execute()
+                                                         part='contentDetails',
+                                                         maxResults=50,
+                                                         ).execute()
 
         """ получить все id видеороликов из плейлиста"""
         self.video_ids: list[str] = [video['contentDetails']['videoId'] for video in self.playl_videos['items']]
         self.video_response = youtube.videos().list(part='contentDetails,statistics',
-                                       id=','.join(self.video_ids)
-                                       ).execute()
+                                                    id=','.join(self.video_ids)
+                                                    ).execute()
 
     """Длительность видео в плейлисте"""
+
     @property
     def total_duration(self):
         duration = datetime.timedelta(0)
@@ -133,7 +137,7 @@ class PlayList:
         b = 0
         for i in pl.video_ids:
             a = Video(i)
-            #print(a.video_likeCount)
+            # print(a.video_likeCount)
             c = int(a.video_likeCount)
             if c > b:
                 b = c
@@ -141,11 +145,8 @@ class PlayList:
         return f"https:/www.youtube.com/wath?v={d}"
 
 
-
-
-
-#class PlayList(MixPlayList):
-    #pass
+# class PlayList(MixPlayList):
+# pass
 s = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
 print(s.playlist_name)
 print(s.playlist)
@@ -161,6 +162,3 @@ duration = pl.total_duration
 print(duration)
 
 print(pl.best_video())
-
-
-

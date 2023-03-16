@@ -1,7 +1,5 @@
 from channel import Channel, PLVideo, Video, PlayList
 
-
-
 # channel_id = 'UCMCgOm8GZkHp8zJ6l7_hIuA'
 # channel_id = 'UC1eFXmJNkjITxPFWTy6RsWg'
 vdud = Channel('UCMCgOm8GZkHp8zJ6l7_hIuA')
