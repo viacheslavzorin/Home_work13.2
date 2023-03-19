@@ -18,8 +18,8 @@ print(vdud.viewCount)
 # print(Channel.get_service)
 print(vdud.get_service())
 vdud.to_json()
-if __name__ == '__main__':
-    ch1 = Channel('UCMCgOm8GZkHp8zJ6l7_hIuA')
+# if __name__ == '__main__':
+# ch1 = Channel('UCMCgOm8GZkHp8zJ6l7_hIuA')
 ch2 = Channel('UCMCgOm8GZkHp8zJ6l7_hIuA')
 print(ch2.title)
 ch1 = Channel("UC1eFXmJNkjITxPFWTy6RsWg")

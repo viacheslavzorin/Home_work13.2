@@ -23,6 +23,9 @@ def test_lt():
 def test_video_init():
     video1 = Video('BBotskuyw_M')
     assert video1.video_titl == "Пушкин: наше все?"
+    # with pytest.raises(Exception):
+    # video = Video("dhfjkk")
+    # assert video.video_titl == None
 
 
 def test_video_str():
@@ -53,3 +56,9 @@ def test_total_duration():
 def test_best_video():
     pl = PlayList('PLguYHBi01DWr4bRWc4uaguASmo7lW4GCb')
     assert pl.best_video() == "https:/www.youtube.com/wath?v=9Bv2zltQKQA"
+
+
+def test_video_exsept():
+    with pytest.raises(Exception):
+        video = Video("dhfjkk")
+        assert video.video_titl

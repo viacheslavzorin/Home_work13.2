@@ -74,10 +74,16 @@ class Channel:
 
 class Video:
     def __init__(self, video_id):
-        self.video_id = video_id
-        self.video_titl = self.video_get()['items'][0]['snippet']['title']
-        self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
-        self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+        try:
+
+            self.video_id = video_id
+            self.video_titl = self.video_get()['items'][0]['snippet']['title']
+            self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
+            self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+        except Exception:
+            self.video_titl = None
+            self.video_viewCount = None
+            self.video_likeCount = None
 
     def video_get(self):
         video_response = youtube.videos().list(part='snippet,statistics',
@@ -162,3 +168,8 @@ duration = pl.total_duration
 print(duration)
 
 print(pl.best_video())
+broken_video = Video('broken_video_id')
+print(broken_video.video_titl)
+# None
+print(broken_video.video_likeCount)
+# None
