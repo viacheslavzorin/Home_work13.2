@@ -86,23 +86,21 @@ class Video:
             self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
             self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
 
-        #try:
-            #self.video_id = video_id
-            #self.video_titl = self.video_get()['items'][0]['snippet']['title']
-            #self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
-            #self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
-        #except Exception:
+        # try:
+        # self.video_id = video_id
+        # self.video_titl = self.video_get()['items'][0]['snippet']['title']
+        # self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
+        # self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+        # except Exception:
 
-            #self.video_titl = None
-            #self.video_viewCount = None
-            #self.video_likeCount = None
+        # self.video_titl = None
+        # self.video_viewCount = None
+        # self.video_likeCount = None
 
     def video_get(self):
         video_response = youtube.videos().list(part='snippet,statistics',
                                                id=self.video_id
                                                ).execute()
-
-
 
         return video_response
 
@@ -188,10 +186,10 @@ print(broken_video.video_titl)
 # None
 print(broken_video.video_likeCount)
 # None
-#c = Video('9lO06Zxhu88')
-#print(c.video_get())
-#print(type(c.video_get()))
-#print(len(c.video_get()['items']))
-#f = Video("hfhfjd")
-#print(f.video_get())
-#print(len(f.video_get()['items']))
+# c = Video('9lO06Zxhu88')
+# print(c.video_get())
+# print(type(c.video_get()))
+# print(len(c.video_get()['items']))
+# f = Video("hfhfjd")
+# print(f.video_get())
+# print(len(f.video_get()['items']))
