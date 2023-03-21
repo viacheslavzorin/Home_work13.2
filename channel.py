@@ -1,6 +1,7 @@
-import json
+import datetime
+import json, isodate
 import os
-
+import isodate
 from googleapiclient.discovery import build
 
 # YT_API_KEY скопирован из гугла и вставлен в переменные окружения
@@ -8,11 +9,9 @@ api_key: str = os.getenv('MY_API_KEY')
 # создать специальный объект для работы с API
 youtube = build('youtube', 'v3', developerKey=api_key)
 
+
 # UC1eFXmJNkjITxPFWTy6RsWg редакия
-
 # channel_id = 'aLdfZn13RXFrTrgUyaGb1A'    # Редакция
-
-
 class Channel:
     def __init__(self, channel_id):
         self.__channel_id = channel_id
@@ -34,20 +33,16 @@ class Channel:
         channel = youtube.channels().list(id=self.__channel_id, part='snippet,statistics').execute()
         return channel
 
-    #@property
-    #def channel_id(self):
+    # @property
+    # def channel_id(self):
+    # return self.__channel_id
 
-        #return self.__channel_id
-
-
-
-
-    #@channel_id.setter
-    #def channel_id(self, channel_id):
-         #if channel_id:
-              #print('UserWarning запрещено')
-         #else:
-              #self.__x = channel_id
+    # @channel_id.setter
+    # def channel_id(self, channel_id):
+    # if channel_id:
+    # print('UserWarning запрещено')
+    # else:
+    # self.__x = channel_id
 
     def get_service(self):
         return build('youtube', 'v3', developerKey=api_key)
@@ -69,10 +64,132 @@ class Channel:
         return f"Yotube-канал: {self.title}"
 
     def __add__(self, other):
+        """сложение"""
         return self.subscriberCount + other.subscriberCount
 
     def __lt__(self, other):
+        """Сравнение"""
         return self.subscriberCount > other.subscriberCount
 
-    #def __lt__(self, other):
-        #return self.subscriberCount < other.subscriberCount
+
+class Video:
+    def __init__(self, video_id):
+        self.video_id = video_id
+
+        if len(self.video_get()['items']) == 0:
+            print("IndexError")
+            self.video_titl = None
+            self.video_viewCount = None
+            self.video_likeCount = None
+        else:
+            self.video_titl = self.video_get()['items'][0]['snippet']['title']
+            self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
+            self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+
+        # try:
+        # self.video_id = video_id
+        # self.video_titl = self.video_get()['items'][0]['snippet']['title']
+        # self.video_viewCount = self.video_get()['items'][0]['statistics']['viewCount']
+        # self.video_likeCount = self.video_get()['items'][0]['statistics']['likeCount']
+        # except Exception:
+
+        # self.video_titl = None
+        # self.video_viewCount = None
+        # self.video_likeCount = None
+
+    def video_get(self):
+        video_response = youtube.videos().list(part='snippet,statistics',
+                                               id=self.video_id
+                                               ).execute()
+
+        return video_response
+
+    def __str__(self):
+        return f"{self.video_titl}"
+
+
+class PLVideo(Video):
+    def __init__(self, video_id, playlist_id):
+        super().__init__(video_id)
+        self.playlist_id = playlist_id
+        self.playlist = youtube.playlists().list(id=playlist_id, part='snippet').execute()
+        self.playlist_name = self.playlist['items'][0]['snippet']['title']
+
+    def __str__(self):
+        return f"{self.video_titl} {self.playlist_name}"
+
+
+class PlayList:
+    """Вывод статистики плайлиста"""
+
+    def __init__(self, id_playl):
+        self.id_playl = id_playl
+        super().__init__()
+        self.playl = youtube.playlists().list(id=self.id_playl, part='snippet, contentDetails',
+                                              maxResults=50).execute()
+        self.url_playl = f"https://www.youtube.com/playlist?list={self.id_playl}"
+        self.playl_name = self.playl['items'][0]['snippet']['title']
+        self.playl_videos = youtube.playlistItems().list(playlistId=id_playl,
+                                                         part='contentDetails',
+                                                         maxResults=50,
+                                                         ).execute()
+
+        """ получить все id видеороликов из плейлиста"""
+        self.video_ids: list[str] = [video['contentDetails']['videoId'] for video in self.playl_videos['items']]
+        self.video_response = youtube.videos().list(part='contentDetails,statistics',
+                                                    id=','.join(self.video_ids)
+                                                    ).execute()
+
+    """Длительность видео в плейлисте"""
+
+    @property
+    def total_duration(self):
+        duration = datetime.timedelta(0)
+        for video in self.video_response['items']:
+            # Длительности YouTube-видео представлены в ISO 8601 формате
+            iso_8601_duration = video['contentDetails']['duration']
+            duration += isodate.parse_duration(iso_8601_duration)
+        return duration
+
+    def best_video(self):
+
+        count1 = 0
+        for i in pl.video_ids:
+            video1 = Video(i)
+            # print(a.video_likeCount)
+            like_count = int(video1.video_likeCount)
+            if like_count > count1:
+                count1 = like_count
+                the_best_video = i
+        return f"https:/www.youtube.com/wath?v={the_best_video}"
+
+
+# class PlayList(MixPlayList):
+# pass
+s = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+print(s.playlist_name)
+print(s.playlist)
+d = PlayList('PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
+print(d.playl)
+print(d.playl_name)
+
+pl = PlayList('PLguYHBi01DWr4bRWc4uaguASmo7lW4GCb')
+print(pl.playl_name)
+print(pl.playl_videos)
+print(pl.video_ids)
+duration = pl.total_duration
+print(duration)
+
+print(pl.best_video())
+broken_video = Video('broken_video_id')
+print(broken_video.video_titl)
+# None
+print(broken_video.video_likeCount)
+# None
+# c = Video('9lO06Zxhu88')
+# print(c.video_get())
+# print(type(c.video_get()))
+# print(len(c.video_get()['items']))
+# f = Video("hfhfjd")
+# print(f.video_get())
+# print(len(f.video_get()['items']))
