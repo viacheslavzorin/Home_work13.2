@@ -25,6 +25,7 @@ print(ch2.title)
 ch1 = Channel("UC1eFXmJNkjITxPFWTy6RsWg")
 
 video1 = Video('9lO06Zxhu88')
+print(video1.video_get())
 video2 = PLVideo('BBotskuyw_M', 'PL7Ntiz7eTKwrqmApjln9u4ItzhDLRtPuD')
 print(video1)
 # Как устроена IT-столица мира / Russian Silicon Valley (English subs)
